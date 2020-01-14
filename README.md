@@ -1,2 +1,2 @@
-# bg-tournament
-Board game tournament app
+# bg-tournament-backend
+Board game tournament app backend
