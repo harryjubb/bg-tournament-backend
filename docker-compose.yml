@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+  app:
+    image: app:latest
+    build:
+      context: ./tournament
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./tournament:/app
+  postgres:
+    image: postgres:latest
+    volumes:
+      - database:/var/lib/postgresql/data/
+
+volumes:
+  database:
