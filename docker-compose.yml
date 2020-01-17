@@ -3,11 +3,18 @@ version: "3.7"
 services:
   app:
     image: app:latest
+    entrypoint:
+      - sh
+      - entrypoint.sh
     build:
       context: ./tournament
       dockerfile: ./Dockerfile
     volumes:
       - ./tournament:/app
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres
   postgres:
     image: postgres:latest
     volumes:
