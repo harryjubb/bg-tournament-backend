@@ -7,30 +7,29 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('player', '0002_auto_20200117_2326'),
-        ('game', '0002_auto_20200117_2343'),
-        ('play', '0002_auto_20200117_2352'),
+        ("player", "0002_auto_20200117_2326"),
+        ("game", "0002_auto_20200117_2343"),
+        ("play", "0002_auto_20200117_2352"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='play',
-            name='players',
-        ),
+        migrations.RemoveField(model_name="play", name="players",),
         migrations.AddField(
-            model_name='play',
-            name='game',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='game.Game'),
+            model_name="play",
+            name="game",
+            field=models.ForeignKey(
+                default=1, on_delete=django.db.models.deletion.CASCADE, to="game.Game"
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='play',
-            name='losers',
-            field=models.ManyToManyField(related_name='lost_plays', to='player.Player'),
+            model_name="play",
+            name="losers",
+            field=models.ManyToManyField(related_name="lost_plays", to="player.Player"),
         ),
         migrations.AddField(
-            model_name='play',
-            name='winners',
-            field=models.ManyToManyField(related_name='won_plays', to='player.Player'),
+            model_name="play",
+            name="winners",
+            field=models.ManyToManyField(related_name="won_plays", to="player.Player"),
         ),
     ]
