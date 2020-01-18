@@ -21,4 +21,6 @@ class Game(models.Model):
 
         # Get data from BGG API if available
 
+        # Otherwise set defaults: can't be null
+
         super().save(*args, **kwargs)
