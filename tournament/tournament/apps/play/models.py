@@ -8,4 +8,4 @@ class Play(models.Model):
     losers = models.ManyToManyField("player.Player", related_name="lost_plays")
 
     def __str__(self):
-        return self.name
+        return f"Play of {self.game.name} at {self.event.code} won by {', '.join(winner.name for winner in self.winners.all())}"
