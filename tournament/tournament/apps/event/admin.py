@@ -1,7 +1,13 @@
 from django.contrib import admin
 from tournament.apps.event.models import Event
+from tournament.apps.play.models import Play
+
+
+class PlayInline(admin.TabularInline):
+    model = Play
 
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    pass
+    inlines = [PlayInline]
+    filter_horizontal = ("players",)
