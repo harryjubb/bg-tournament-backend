@@ -1,3 +1,7 @@
 from django.contrib import admin
+from tournament.apps.play.models import Play
 
-# Register your models here.
+
+@admin.register(Play)
+class PlayAdmin(admin.ModelAdmin):
+    pass

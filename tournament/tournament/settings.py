@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "tournament.apps.event",
     "tournament.apps.player",
+    "tournament.apps.game",
+    "tournament.apps.play",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
