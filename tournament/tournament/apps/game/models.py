@@ -66,4 +66,6 @@ class Game(models.Model):
             else:
                 pass
 
+        # TODO: Re-save all plays of this game to update scores (Harry Jubb, Sun 19 Jan 2020 00:47:03 GMT)
+
         super().save(*args, **kwargs)
