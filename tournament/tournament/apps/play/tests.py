@@ -4,6 +4,17 @@ from datetime import timedelta
 
 
 class TestScore:
+    def test_base_game(self):
+        assert (
+            score_play(
+                game_min_length=timedelta(minutes=60),
+                game_complexity=1.0,
+                num_winners=1,
+                num_losers=3,
+            )
+            == 100
+        )
+
     def test_carcasonne(self):
         """
         One person winning a four player game of Carcassonne. 
