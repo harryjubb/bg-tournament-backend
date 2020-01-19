@@ -1,3 +1,4 @@
+# \left(\frac{\left(\frac{\text{num players}}{4}\times\frac{\text{min play time}}{1\text{ hour}}\times\text{complexity}\right)}{\text{num winners}}\right)\times{100}
 def score_play(game_min_length, game_complexity, num_winners, num_losers):
     try:
         return (
