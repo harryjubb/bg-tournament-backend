@@ -12,6 +12,10 @@ class Play(models.Model):
     losers = models.ManyToManyField("player.Player", related_name="lost_plays")
 
     @property
+    def players(self):
+        return (self.winners.all() | self.losers.all()).distinct()
+
+    @property
     def score(self):
         return score_play(
             game_min_length=self.game.min_length,
