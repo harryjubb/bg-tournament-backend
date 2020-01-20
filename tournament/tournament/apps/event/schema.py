@@ -2,6 +2,9 @@ from graphene_django import DjangoObjectType
 import graphene
 
 from tournament.apps.event.models import Event
+from tournament.apps.play.schema import PlayType
+from tournament.apps.game.schema import GameType
+from tournament.apps.player.schema import PlayerType
 
 
 class EventType(DjangoObjectType):
@@ -10,10 +13,11 @@ class EventType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    event = graphene.Field(EventType, description="Retrieve an event by event code")
+    event = graphene.Field(
+        EventType,
+        code=graphene.String(),
+        description="Retrieve an event by an event code",
+    )
 
-    def resolve_users(self, info):
-        return UserModel.objects.all()
-
-
-schema = graphene.Schema(query=Query)
+    def resolve_event(self, info, code):
+        return Event.objects.get(code=code)
