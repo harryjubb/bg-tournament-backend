@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from tournament.apps.play.utils import score_play
 
@@ -20,3 +22,9 @@ class Play(models.Model):
 
     def __str__(self):
         return f"{self.winners.count() + self.losers.count()} player {self.game.name} at {self.event.code} won by {', '.join(winner.name for winner in self.winners.all())}, scoring {self.score:.2f} per winner"
+
+
+@receiver(post_save, sender=Play)
+def play_post_save(sender, **kwargs):
+    # Push to event websocket group here
+    pass

@@ -19,6 +19,8 @@ services:
     image: postgres:latest
     volumes:
       - database:/var/lib/postgresql/data/
+  redis:
+    image: redis:latest
 
 volumes:
   database:
