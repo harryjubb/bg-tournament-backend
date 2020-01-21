@@ -6,7 +6,7 @@ import json
 class EventConsumer(JsonWebsocketConsumer):
     def connect(self):
         self.event_name = self.scope["url_route"]["kwargs"]["event_name"]
-        self.event_group_name = "chat_%s" % self.event_name
+        self.event_group_name = f"event_{self.event_name}"
 
         # Join event group
         async_to_sync(self.channel_layer.group_add)(
