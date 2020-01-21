@@ -1,9 +1,9 @@
 from asgiref.sync import async_to_sync
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import JsonWebsocketConsumer
 import json
 
 
-class EventConsumer(WebsocketConsumer):
+class EventConsumer(JsonWebsocketConsumer):
     def connect(self):
         self.event_name = self.scope["url_route"]["kwargs"]["event_name"]
         self.event_group_name = "chat_%s" % self.event_name
