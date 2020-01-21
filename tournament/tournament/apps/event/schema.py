@@ -15,9 +15,9 @@ class EventType(DjangoObjectType):
 class Query(graphene.ObjectType):
     event = graphene.Field(
         EventType,
-        code=graphene.String(),
+        code=graphene.String(required=True),
         description="Retrieve an event by an event code",
     )
 
-    def resolve_event(self, info, code):
+    def resolve_event(self, info, code=None):
         return Event.objects.get(code=code)
