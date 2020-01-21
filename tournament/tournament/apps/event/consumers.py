@@ -24,7 +24,7 @@ class EventConsumer(JsonWebsocketConsumer):
     def receive_json(self, content):
         command = content.get("command", None)
 
-        if command == "event_updated":
+        if command == "play_added":
             async_to_sync(self.channel_layer.group_send)(
                 self.event_group_name, {"type": "event_updated"}
             )
