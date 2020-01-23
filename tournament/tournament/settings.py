@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import environ
+
+env = environ.Env()
+
+DEVELOPMENT_MODE = env.bool("TOURNAMENT_DEVELOPMENT_MODE")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,10 +28,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "_88#c52^vt7^2574a9iqu0$s*hdbt_yovv_frdwp8wquvzt6oc"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if DEVELOPMENT_MODE:
+    print("DEVELOPMENT_MODE is on")
+    DEBUG = True
+else:
+    DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
+if DEVELOPMENT_MODE:
+    CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
 
@@ -43,9 +54,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "graphene_django",
     "channels",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
