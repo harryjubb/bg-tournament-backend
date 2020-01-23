@@ -1,12 +1,12 @@
 from asgiref.sync import async_to_sync
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import JsonWebsocketConsumer
 import json
 
 
-class EventConsumer(WebsocketConsumer):
+class EventConsumer(JsonWebsocketConsumer):
     def connect(self):
         self.event_name = self.scope["url_route"]["kwargs"]["event_name"]
-        self.event_group_name = "chat_%s" % self.event_name
+        self.event_group_name = f"event_{self.event_name}"
 
         # Join event group
         async_to_sync(self.channel_layer.group_add)(
@@ -24,7 +24,7 @@ class EventConsumer(WebsocketConsumer):
     def receive_json(self, content):
         command = content.get("command", None)
 
-        if command == "event_updated":
+        if command == "play_added":
             async_to_sync(self.channel_layer.group_send)(
                 self.event_group_name, {"type": "event_updated"}
             )
