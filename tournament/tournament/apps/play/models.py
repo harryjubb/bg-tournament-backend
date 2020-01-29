@@ -4,6 +4,12 @@ from django.dispatch import receiver
 
 from tournament.apps.play.utils import score_play
 
+from channels.layers import get_channel_layer
+
+channel_layer = get_channel_layer()
+
+from asgiref.sync import async_to_sync
+
 
 class Play(models.Model):
     event = models.ForeignKey("event.Event", on_delete=models.CASCADE)
@@ -29,6 +35,8 @@ class Play(models.Model):
 
 
 @receiver(post_save, sender=Play)
-def play_post_save(sender, **kwargs):
+def play_post_save(sender, instance, **kwargs):
     # Push to event websocket group here
-    pass
+    async_to_sync(channel_layer.group_send)(
+        f"event_{instance.event.code}", {"type": "play.added"}
+    )

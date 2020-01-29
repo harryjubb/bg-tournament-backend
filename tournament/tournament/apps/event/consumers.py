@@ -21,12 +21,13 @@ class EventConsumer(JsonWebsocketConsumer):
             self.event_group_name, self.channel_name
         )
 
-    def receive_json(self, content):
-        command = content.get("command", None)
+    def play_added(self, event):
+        self.send_json(content={"type": "event.updated"})
 
-        if command == "play_added":
-            async_to_sync(self.channel_layer.group_send)(
-                self.event_group_name, {"type": "event_updated"}
-            )
-
-
+    # def receive_json(self, content):
+    #     command = content.get("command", None)
+    #
+    #     if command == "play_added":
+    #         async_to_sync(self.channel_layer.group_send)(
+    #             self.event_group_name, {"type": "event_updated"}
+    #         )
