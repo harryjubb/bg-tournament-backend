@@ -24,6 +24,9 @@ class EventConsumer(JsonWebsocketConsumer):
     def play_added(self, event):
         self.send_json(content={"type": "event.updated"})
 
+    def play_deleted(self, event):
+        self.send_json(content={"type": "event.updated"})
+
     # def receive_json(self, content):
     #     command = content.get("command", None)
     #

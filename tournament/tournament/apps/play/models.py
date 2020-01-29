@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
 from tournament.apps.play.utils import score_play
@@ -36,7 +36,13 @@ class Play(models.Model):
 
 @receiver(post_save, sender=Play)
 def play_post_save(sender, instance, **kwargs):
-    # Push to event websocket group here
     async_to_sync(channel_layer.group_send)(
         f"event_{instance.event.code}", {"type": "play.added"}
+    )
+
+
+@receiver(post_delete, sender=Play)
+def play_post_delete(sender, instance, **kwargs):
+    async_to_sync(channel_layer.group_send)(
+        f"event_{instance.event.code}", {"type": "play.deleted"}
     )
