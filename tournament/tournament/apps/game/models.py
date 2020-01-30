@@ -19,6 +19,7 @@ DEFAULTS = {
 
 
 class Game(models.Model):
+    bgg_id = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=1024, blank=True)
     game_type = models.CharField(
         max_length=100,
@@ -33,7 +34,6 @@ class Game(models.Model):
     max_players = models.SmallIntegerField(blank=True)
     url = models.URLField(max_length=4000, blank=True)
     image_url = models.URLField(max_length=4000, blank=True)
-    bgg_id = models.IntegerField()
 
     def __str__(self):
         return self.name
@@ -41,7 +41,7 @@ class Game(models.Model):
     def save(self, *args, **kwargs):
 
         # Get data from BGG API if available
-        bgg_item = get_bgg_data(self.bgg_id)
+        bgg_item = get_bgg_data(self.bgg_id) if self.bgg_id else DEFAULTS
 
         for field in (
             "name",
