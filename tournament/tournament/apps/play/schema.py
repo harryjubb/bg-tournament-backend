@@ -16,3 +16,6 @@ class PlayType(DjangoObjectType):
 
 
 # TODO: Add mutation for adding a play (Harry Jubb, Thu 30 Jan 2020 00:31:47 GMT)
+# class AddPlay(graphene.Mutation):
+#     class Arguments:
+#         event_id =

@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 
 from datetime import timedelta
@@ -19,6 +20,8 @@ DEFAULTS = {
 
 
 class Game(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
     bgg_id = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=1024, blank=True)
     game_type = models.CharField(

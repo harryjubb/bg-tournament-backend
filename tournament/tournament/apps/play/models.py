@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
@@ -12,6 +13,7 @@ from asgiref.sync import async_to_sync
 
 
 class Play(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     event = models.ForeignKey("event.Event", on_delete=models.CASCADE)
     game = models.ForeignKey("game.Game", on_delete=models.CASCADE)
     winners = models.ManyToManyField("player.Player", related_name="won_plays")
