@@ -36,11 +36,11 @@ class Play(models.Model):
         return f"{self.winners.count() + self.losers.count()} player {self.game.name} at {self.event.code} won by {', '.join(winner.name for winner in self.winners.all())}, scoring {self.score:.2f} per winner"
 
 
-@receiver(post_save, sender=Play)
-def play_post_save(sender, instance, **kwargs):
-    async_to_sync(channel_layer.group_send)(
-        f"event_{instance.event.code}", {"type": "play.added"}
-    )
+# @receiver(post_save, sender=Play)
+# def play_post_save(sender, instance, **kwargs):
+#     async_to_sync(channel_layer.group_send)(
+#         f"event_{instance.event.code}", {"type": "play.added"}
+#     )
 
 
 @receiver(post_delete, sender=Play)

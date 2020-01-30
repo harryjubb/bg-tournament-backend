@@ -10,7 +10,7 @@ class GameType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    games = graphene.List(GameType, description="Retrieve all available games",)
+    games = graphene.List(GameType, description="Retrieve all available games.",)
 
     def resolve_games(self, info):
         return Game.objects.all()

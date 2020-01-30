@@ -1,7 +1,16 @@
 from graphene_django import DjangoObjectType
+from graphql import GraphQLError
 import graphene
 
 from tournament.apps.play.models import Play
+from tournament.apps.event.models import Event
+from tournament.apps.game.models import Game
+from tournament.apps.player.models import Player
+
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+
+channel_layer = get_channel_layer()
 
 
 class PlayType(DjangoObjectType):
@@ -15,7 +24,43 @@ class PlayType(DjangoObjectType):
         return self.score
 
 
-# TODO: Add mutation for adding a play (Harry Jubb, Thu 30 Jan 2020 00:31:47 GMT)
-# class AddPlay(graphene.Mutation):
-#     class Arguments:
-#         event_id =
+class AddPlay(graphene.Mutation):
+    class Arguments:
+        event_id = graphene.UUID(required=True)
+        game_id = graphene.UUID(required=True)
+        winner_ids = graphene.List(graphene.UUID, required=True)
+        loser_ids = graphene.List(graphene.UUID, required=True)
+
+    ok = graphene.Boolean()
+    play = graphene.Field(lambda: PlayType)
+
+    def mutate(
+        self, info, event_id=None, game_id=None, winner_ids=None, loser_ids=None
+    ):
+
+        print("got here")
+
+        if any([arg is None for arg in [event_id, game_id, winner_ids, loser_ids]]):
+            raise GraphQLError(f"Missing required IDs")
+
+        event = Event.objects.get(id=event_id)
+        game = Game.objects.get(id=game_id)
+        winners = Player.objects.filter(id__in=winner_ids).distinct()
+        losers = Player.objects.filter(id__in=loser_ids).distinct()
+
+        play = Play.objects.create(event=event, game=game)
+
+        play.winners.set(winners)
+        play.losers.set(losers)
+
+        play.save()
+
+        async_to_sync(channel_layer.group_send)(
+            f"event_{play.event.code}", {"type": "play.added"}
+        )
+
+        return AddPlay(ok=True, play=play)
+
+
+class Mutation:
+    add_play = AddPlay.Field(description="Add a play of a game to an event.")
