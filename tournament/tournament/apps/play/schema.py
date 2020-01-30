@@ -13,3 +13,6 @@ class PlayType(DjangoObjectType):
 
     def resolve_score(self, info):
         return self.score
+
+
+# TODO: Add mutation for adding a play (Harry Jubb, Thu 30 Jan 2020 00:31:47 GMT)
