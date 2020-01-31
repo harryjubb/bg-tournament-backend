@@ -38,8 +38,6 @@ class AddPlay(graphene.Mutation):
         self, info, event_id=None, game_id=None, winner_ids=None, loser_ids=None
     ):
 
-        print("got here")
-
         if any([arg is None for arg in [event_id, game_id, winner_ids, loser_ids]]):
             raise GraphQLError(f"Missing required IDs")
 
