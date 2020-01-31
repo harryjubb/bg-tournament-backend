@@ -19,6 +19,9 @@ class Play(models.Model):
     winners = models.ManyToManyField("player.Player", related_name="won_plays")
     losers = models.ManyToManyField("player.Player", related_name="lost_plays")
 
+    date_created = models.DateTimeField(auto_now_add=True, blank=True)
+    date_updated = models.DateTimeField(auto_now=True, blank=True)
+
     @property
     def players(self):
         return (self.winners.all() | self.losers.all()).distinct()
