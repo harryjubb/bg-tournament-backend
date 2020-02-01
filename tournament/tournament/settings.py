@@ -17,6 +17,12 @@ env = environ.Env()
 
 DEVELOPMENT_MODE = env.bool("TOURNAMENT_DEVELOPMENT_MODE")
 
+# Domain
+DOMAIN = env.str("TOURNAMENT_DOMAIN")
+
+MEDIA_ROOT = env.str("TOURNAMENT_MEDIA_ROOT", "/media")
+MEDIA_URL = env.str("TOURNAMENT_MEDIA_URL", "/media/")
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -119,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en-gb"
 
 TIME_ZONE = "UTC"
 

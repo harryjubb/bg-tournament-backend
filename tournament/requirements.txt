@@ -9,3 +9,4 @@ pytest-django==3.8.0
 channels==2.4.0
 channels_redis==2.4.1
 graphene-django==2.8.0
+pillow==7.0.0

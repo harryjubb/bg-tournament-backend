@@ -1,3 +1,5 @@
+from urllib.parse import urljoin
+
 from django.db.models import Q
 
 from graphene_django import DjangoObjectType
@@ -5,11 +7,17 @@ import graphene
 
 from tournament.apps.player.models import Player
 
+from django.conf import settings
+
 
 class PlayerType(DjangoObjectType):
     class Meta:
         model = Player
         fields = ("id", "name")
+
+    avatar_url = graphene.String(
+        description="Absolute URL for the avatar for this player."
+    )
 
     event_play_count = graphene.Int(
         event_code=graphene.String(required=True),
@@ -48,6 +56,9 @@ class PlayerType(DjangoObjectType):
         event_code=graphene.String(required=True),
         description="Retrieve the total score accrued for a given event code for this player.",
     )
+
+    def resolve_avatar_url(self, info):
+        return info.context.build_absolute_uri(self.avatar.url) if self.avatar else None
 
     def resolve_event_play_count(self, info, event_code=None):
         return (
