@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+  nginx:
+    image: linuxserver/letsencrypt
+    cap_add:
+      - NET_ADMIN
+    env_file:
+      .env
+    volumes:
+      ./nginx:/config
+      media:/media
+    restart: always
+
+volumes:
+  media:

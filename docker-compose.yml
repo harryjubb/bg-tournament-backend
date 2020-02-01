@@ -18,12 +18,15 @@ services:
       - postgres
     env_file:
       - .env
+    restart: always
   postgres:
     image: postgres:latest
     volumes:
       - database:/var/lib/postgresql/data/
+    restart: always
   redis:
     image: redis:latest
+    restart: always
 
 volumes:
   database:
