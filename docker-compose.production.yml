@@ -1,6 +1,10 @@
 version: "3.7"
 
 services:
+  app:
+    entrypoint:
+      - sh
+      - entrypoint.production.sh
   nginx:
     image: linuxserver/letsencrypt
     cap_add:
