@@ -8,8 +8,8 @@ services:
     env_file:
       .env
     volumes:
-      ./nginx:/config
-      media:/media
+      - ./nginx:/config
+      - media:/media
     restart: always
 
 volumes:
