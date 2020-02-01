@@ -11,6 +11,7 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - ./tournament:/app
+      - static:/static
       - media:/media
     ports:
       - 8000:8000
@@ -30,4 +31,5 @@ services:
 
 volumes:
   database:
+  static:
   media:

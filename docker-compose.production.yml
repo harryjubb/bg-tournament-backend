@@ -9,6 +9,7 @@ services:
       .env
     volumes:
       - ./nginx:/config
+      - static:/static
       - media:/media
     ports:
       - 80:80
@@ -16,4 +17,5 @@ services:
     restart: always
 
 volumes:
+  static:
   media:
