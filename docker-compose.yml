@@ -11,6 +11,7 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - ./tournament:/app
+      - media:/media
     ports:
       - 8000:8000
     depends_on:
@@ -21,7 +22,6 @@ services:
     image: postgres:latest
     volumes:
       - database:/var/lib/postgresql/data/
-      - media:/media
   redis:
     image: redis:latest
 
