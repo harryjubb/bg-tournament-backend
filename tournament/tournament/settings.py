@@ -47,6 +47,8 @@ ALLOWED_HOSTS = ["*"]
 
 if DEVELOPMENT_MODE:
     CORS_ORIGIN_ALLOW_ALL = True
+else:
+    CORS_ORIGIN_WHITELIST = env.list("TOURNAMENT_CORS_ORIGIN_WHITELIST", [])
 
 # Application definition
 
