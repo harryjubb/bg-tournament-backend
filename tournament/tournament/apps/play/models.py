@@ -28,6 +28,9 @@ class Play(models.Model):
 
     @property
     def score(self):
+        """
+        Score per-winner of this play.
+        """
         return score_play(
             game_min_length=self.game.min_length,
             game_complexity=self.game.complexity,
