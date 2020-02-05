@@ -11,3 +11,9 @@ class Event(models.Model):
 
     def __str__(self):
         return f"Event {self.code}"
+
+    def save(self, *args, **kwargs):
+
+        # Force all event codes to be uppercase
+        self.code = self.code.upper()
+        super().save(*args, **kwargs)
