@@ -57,6 +57,11 @@ class PlayerType(DjangoObjectType):
         description="Retrieve the total score accrued for a given event code for this player.",
     )
 
+    event_previous_total_score = graphene.Float(
+        event_code=graphene.String(required=True),
+        description="Retrieve the total score accrued for a given event code for this player, including all but the latest play.",
+    )
+
     def resolve_avatar_url(self, info):
         return info.context.build_absolute_uri(self.avatar.url) if self.avatar else None
 
@@ -111,4 +116,13 @@ class PlayerType(DjangoObjectType):
             for play in self.event_set.get(code=event_code)
             .play_set.filter(winners__id=self.id)
             .distinct()
+        )
+
+    def resolve_event_previous_total_score(self, info, event_code=None):
+        return sum(
+            play.score
+            for play in self.event_set.get(code=event_code)
+            .play_set.order_by("-date_created")
+            .distinct()[1:]
+            if self in play.winners.all()
         )
