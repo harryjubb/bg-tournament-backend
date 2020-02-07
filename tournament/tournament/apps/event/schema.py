@@ -15,8 +15,15 @@ class EventType(DjangoObjectType):
         PlayType, n=graphene.Int(), description="Recent plays in order of recency."
     )
 
+    play_count = graphene.Int(
+        description="Number of plays that have occurred in this event."
+    )
+
     def resolve_recent_plays(self, info, n=5):
         return self.play_set.order_by("-date_created")[:n]
+
+    def resolve_play_count(self, info):
+        return self.play_set.count()
 
 
 class Query(graphene.ObjectType):
