@@ -11,6 +11,13 @@ class EventType(DjangoObjectType):
     class Meta:
         model = Event
 
+    recent_plays = graphene.List(
+        PlayType, n=graphene.Int(), description="Recent plays in order of recency."
+    )
+
+    def resolve_recent_plays(self, info, n=5):
+        return self.play_set.order_by("-date_created")[:n]
+
 
 class Query(graphene.ObjectType):
     event = graphene.Field(
