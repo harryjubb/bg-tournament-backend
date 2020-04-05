@@ -1,0 +1,2 @@
+class EventInactiveError(Exception):
+    pass

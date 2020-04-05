@@ -4,6 +4,7 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
 from tournament.apps.play.utils import score_play
+from tournament.apps.event.exceptions import EventInactiveError
 
 from channels.layers import get_channel_layer
 
@@ -41,6 +42,10 @@ class Play(models.Model):
     def __str__(self):
         return f"{self.winners.count() + self.losers.count()} player {self.game.name} at {self.event.code} won by {', '.join(winner.name for winner in self.winners.all())}, scoring {self.score:.2f} per winner"
 
+    def save(self, *args, **kwargs):
+
+        if not self.event.active:
+            raise EventInactiveError("Cannot save a play for an inactive event")
 
 # @receiver(post_save, sender=Play)
 # def play_post_save(sender, instance, **kwargs):

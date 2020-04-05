@@ -9,6 +9,7 @@ from tournament.apps.player.models import Player
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from tournament.apps.event.exceptions import EventInactiveError
 
 channel_layer = get_channel_layer()
 
@@ -42,6 +43,10 @@ class AddPlay(graphene.Mutation):
             raise GraphQLError(f"Missing required IDs")
 
         event = Event.objects.get(id=event_id)
+
+        if not event.active:
+            raise EventInactiveError("Cannot add a play to an inactive event")
+
         game = Game.objects.get(id=game_id)
         winners = Player.objects.filter(id__in=winner_ids).distinct()
         losers = Player.objects.filter(id__in=loser_ids).distinct()
