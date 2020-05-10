@@ -18,7 +18,8 @@ env = environ.Env()
 DEVELOPMENT_MODE = env.bool("TOURNAMENT_DEVELOPMENT_MODE")
 
 # Domain
-DOMAIN = env.str("TOURNAMENT_DOMAIN")
+DOMAIN = env.str("TOURNAMENT_API_DOMAIN")
+FRONTEND_DOMAIN = env.str("TOURNAMENT_FRONTEND_DOMAIN")
 
 MEDIA_ROOT = env.str("TOURNAMENT_MEDIA_ROOT", "/media")
 MEDIA_URL = env.str("TOURNAMENT_MEDIA_URL", "/media/")
@@ -55,9 +56,12 @@ if not DEVELOPMENT_MODE:
     USE_X_FORWARDED_HOST = True
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
+DISCORD_TOKEN = env.str("TOURNAMENT_DISCORD_TOKEN", None)
+
 # Application definition
 
 INSTALLED_APPS = [
+    "tournament.apps.core",
     "tournament.apps.event",
     "tournament.apps.player",
     "tournament.apps.game",

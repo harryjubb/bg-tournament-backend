@@ -20,6 +20,17 @@ services:
     env_file:
       - .env
     restart: always
+  discord:
+    image: app:latest
+    depends_on:
+      - app
+    env_file:
+      - .env
+    restart: always
+    command:
+      - python
+      - /app/manage.py
+      - discord
   postgres:
     image: postgres:latest
     volumes:
