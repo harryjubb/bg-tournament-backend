@@ -1,3 +1,5 @@
+import requests
+
 from graphene_django import DjangoObjectType
 from graphql import GraphQLError
 import graphene
@@ -61,6 +63,21 @@ class AddPlay(graphene.Mutation):
         async_to_sync(channel_layer.group_send)(
             f"event_{play.event.code}", {"type": "play.added"}
         )
+
+        # Fire custom webhooks
+        for webhook in play.event.webhook_set.all():
+
+            content = webhook.content.replace("%%play_summary%%", str(play))
+
+            try:
+                requests.request(
+                    webhook.request_type,
+                    webhook.url,
+                    headers={"Content-Type": webhook.content_type},
+                    data=content.encode("utf-8"),
+                )
+            except Exception as error:
+                pass
 
         return AddPlay(ok=True, play=play)
 

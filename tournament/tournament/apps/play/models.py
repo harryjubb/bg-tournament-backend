@@ -40,12 +40,15 @@ class Play(models.Model):
         )
 
     def __str__(self):
-        return f"{self.winners.count() + self.losers.count()} player {self.game.name} at {self.event.code} won by {', '.join(winner.name for winner in self.winners.all())}, scoring {self.score:.2f} per winner"
+        return f"{self.winners.count() + self.losers.count()} player {self.game.name} at {self.event.name} won by {', '.join(winner.name for winner in self.winners.all())}, scoring {self.score:.2f} per winner"
 
     def save(self, *args, **kwargs):
 
         if not self.event.active:
             raise EventInactiveError("Cannot save a play for an inactive event")
+
+        super().save(*args, **kwargs)
+
 
 # @receiver(post_save, sender=Play)
 # def play_post_save(sender, instance, **kwargs):
