@@ -75,6 +75,7 @@ class AddPlay(graphene.Mutation):
                     webhook.url,
                     headers={"Content-Type": webhook.content_type},
                     data=content.encode("utf-8"),
+                    timeout=10,
                 )
             except Exception as error:
                 pass
