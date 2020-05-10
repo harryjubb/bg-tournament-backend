@@ -48,6 +48,22 @@ def get_event_leaderboard(event_code=None):
     }
 
 
+@sync_to_async
+def get_event_add_play_link(event_code=None):
+    event = None
+    try:
+        event = Event.objects.get(code=event_code)
+    except (ObjectDoesNotExist, MultipleObjectsReturned):
+        raise ValueError("Unable to retrieve a link for this event.")
+
+    if not event:
+        raise ValueError("Unable to retrieve a link for this event.")
+
+    return urljoin(
+        settings.FRONTEND_DOMAIN, "/".join(["event", event.code, "play", "add"])
+    )
+
+
 class Command(BaseCommand):
     help = "Runs a Discord bot for the Tournament app"
 
@@ -105,5 +121,23 @@ class Command(BaseCommand):
 More details at {leaderboard_url}
 """
             )
+
+        @bot.command(name="addplay", help="Get a tournament event add play link")
+        async def add_play(ctx, event_code: Optional[str] = None):
+            link = None
+
+            try:
+                link = await get_event_add_play_link(
+                    event_code.upper() if event_code else ctx.channel.name.upper()
+                )
+            except ValueError as error:
+                await ctx.send(str(error))
+                return
+
+            if not link:
+                await ctx.send("Unable to retrieve a link for this event.")
+                return
+
+            await ctx.send(link)
 
         bot.run(settings.DISCORD_TOKEN)
