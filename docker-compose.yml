@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 
 services:
   app:
@@ -26,7 +26,8 @@ services:
       - app
     env_file:
       - .env
-    restart: always
+    restart_policy:
+      condition: none
     command:
       - python
       - /app/manage.py
