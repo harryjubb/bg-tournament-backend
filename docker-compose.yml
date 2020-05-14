@@ -26,8 +26,7 @@ services:
       - app
     env_file:
       - .env
-    restart_policy:
-      condition: none
+    restart: "no"
     command:
       - python
       - /app/manage.py
