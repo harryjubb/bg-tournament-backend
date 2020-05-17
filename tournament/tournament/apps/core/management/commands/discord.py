@@ -1,6 +1,8 @@
 from operator import itemgetter
-from typing import Optional
+from typing import Optional, List
 from urllib.parse import urljoin
+from more_itertools import divide
+import random
 import time
 
 from asgiref.sync import sync_to_async
@@ -12,6 +14,10 @@ from django.conf import settings
 from tournament.apps.event.models import Event
 
 from discord.ext import commands
+
+
+def join_team_members(team_members):
+    return "\n".join([f"- {team_member}" for team_member in team_members])
 
 
 @sync_to_async
@@ -77,7 +83,9 @@ class Command(BaseCommand):
             while 1:
                 time.sleep(10)
 
-        bot = commands.Bot(command_prefix="!")
+        bot = commands.Bot(
+            command_prefix="!", description="Board game tournament helper bot"
+        )
 
         @bot.event
         async def on_ready():
@@ -139,5 +147,59 @@ More details at {leaderboard_url}
                 return
 
             await ctx.send(link)
+
+        @bot.command(
+            name="turnorder",
+            help="Determine order of playing for a set of player initials. Provide a list of initials separated by spaces",
+        )
+        async def turn_order(ctx, *args):
+
+            player_initials = [initial for initial in args]
+
+            if not player_initials:
+                await ctx.send(
+                    "You must provide player initials to determine a turn order"
+                )
+                return
+
+            new_player_order = random.sample(player_initials, len(player_initials))
+            new_player_order_formatted = "\n".join(
+                [
+                    f"{i + 1}. {player_initial}"
+                    for i, player_initial in enumerate(new_player_order)
+                ]
+            )
+
+            await ctx.send(f"**Turn Order**\n\n{new_player_order_formatted}")
+
+        @bot.command(
+            name="teams",
+            help="Split a set of given player initials into a given number of teams",
+        )
+        async def teams(ctx, number_of_teams: int = None, *args):
+
+            if not number_of_teams:
+                await ctx.send(
+                    "You must provide the number of teams to place players in"
+                )
+                return
+
+            player_initials = [initial for initial in args]
+
+            if not player_initials:
+                await ctx.send("You must provide player initials to determine a teams")
+                return
+
+            new_player_order = random.sample(player_initials, len(player_initials))
+            teams = divide(number_of_teams, new_player_order)
+
+            teams_formatted = "\n\n".join(
+                [
+                    f"Team {i + 1}\n{join_team_members(team)}"
+                    for i, team in enumerate(teams)
+                ]
+            )
+
+            await ctx.send(f"**Teams**\n\n{teams_formatted}")
 
         bot.run(settings.DISCORD_TOKEN)
